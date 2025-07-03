@@ -51,6 +51,12 @@
         <!-- Deliveries Section -->
         <section class="bg-white rounded-xl shadow-lente p-6">
             <h2 class="text-2xl font-semibold text-lente-primary mb-5 border-b-2 border-lente-accent pb-3">For Delivery 🚚</h2>
+            <div class="mb-4 space-y-2">
+                <input type="text" id="delivery-renter-name" placeholder="Renter Name" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+                <input type="text" id="delivery-camera-model" placeholder="Camera Model" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+                <input type="date" id="delivery-date" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+                <button id="add-delivery-btn" class="w-full px-4 py-2 bg-lente-primary text-white rounded-md hover:bg-opacity-90 transition-colors duration-200">Add Delivery</button>
+            </div>
             <div id="delivery-list" class="space-y-4">
                 <!-- Delivery items will be rendered here by JavaScript -->
             </div>
@@ -59,6 +65,12 @@
         <!-- Retrievals Section -->
         <section class="bg-white rounded-xl shadow-lente p-6">
             <h2 class="text-2xl font-semibold text-lente-primary mb-5 border-b-2 border-lente-accent pb-3">For Retrieval 📦</h2>
+            <div class="mb-4 space-y-2">
+                <input type="text" id="retrieval-renter-name" placeholder="Renter Name" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+                <input type="text" id="retrieval-camera-model" placeholder="Camera Model" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+                <input type="date" id="retrieval-date" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+                <button id="add-retrieval-btn" class="w-full px-4 py-2 bg-lente-primary text-white rounded-md hover:bg-opacity-90 transition-colors duration-200">Add Retrieval</button>
+            </div>
             <div id="retrieval-list" class="space-y-4">
                 <!-- Retrieval items will be rendered here by JavaScript -->
             </div>
@@ -67,24 +79,30 @@
     </main>
 
     <script>
-        // Sample data for deliveries and retrievals
-        const deliveries = [
-            { id: 'd1', renter: 'John Doe', camera: 'Canon EOS R5', date: 'July 5, 2025', status: 'Pending' },
-            { id: 'd2', renter: 'Jane Smith', camera: 'Sony A7III', date: 'July 6, 2025', status: 'Pending' },
-            { id: 'd3', renter: 'Carlos Reyes', camera: 'Nikon Z8', date: 'July 7, 2025', status: 'Pending' }
-        ];
+        // Initialize data from localStorage or use empty arrays if nothing is stored
+        let deliveries = JSON.parse(localStorage.getItem('lenteLuminaDeliveries')) || [];
+        let retrievals = JSON.parse(localStorage.getItem('lenteLuminaRetrievals')) || [];
 
-        const retrievals = [
-            { id: 'r1', renter: 'Mark Anthony', camera: 'Nikon Z6', date: 'July 4, 2025', status: 'Pending' },
-            { id: 'r2', renter: 'Alice Brown', camera: 'Fujifilm X-T4', date: 'July 5, 2025', status: 'Pending' },
-            { id: 'r3', renter: 'Maria Santos', camera: 'Canon EOS R6', date: 'July 6, 2025', status: 'Pending' }
-        ];
+        // Function to save data to localStorage
+        function saveData() {
+            localStorage.setItem('lenteLuminaDeliveries', JSON.stringify(deliveries));
+            localStorage.setItem('lenteLuminaRetrievals', JSON.stringify(retrievals));
+        }
+
+        // Function to render all items in a list
+        function renderItems(list, containerId, type) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = ''; // Clear existing items
+            list.forEach(item => {
+                container.appendChild(createRentalCard(item, type));
+            });
+        }
 
         // Function to create a card for a rental item
         function createRentalCard(item, type) {
             const card = document.createElement('div');
             card.id = `item-${item.id}`; // Unique ID for each card
-            card.className = `bg-lente-accent bg-opacity-30 p-4 rounded-lg shadow-sm border border-lente-accent flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0`;
+            card.className = `bg-lente-accent bg-opacity-30 p-4 rounded-lg shadow-sm border border-lente-accent flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0 ${item.status === 'Completed' ? 'opacity-50 line-through' : ''}`;
 
             const detailsHtml = `
                 <div>
@@ -95,51 +113,98 @@
             `;
             card.innerHTML = detailsHtml;
 
-            const button = document.createElement('button');
-            button.className = `mt-2 sm:mt-0 px-4 py-2 bg-lente-primary text-white rounded-md hover:bg-opacity-90 transition-colors duration-200`;
-            button.textContent = `Mark as ${item.status === 'Pending' ? 'Completed' : 'Pending'}`; // Dynamic button text
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 mt-2 sm:mt-0';
 
-            // Add event listener to toggle status (for demonstration)
-            button.addEventListener('click', () => {
+            const toggleButton = document.createElement('button');
+            toggleButton.className = `px-4 py-2 bg-lente-primary text-white rounded-md hover:bg-opacity-90 transition-colors duration-200`;
+            toggleButton.textContent = `Mark as ${item.status === 'Pending' ? 'Completed' : 'Pending'}`;
+
+            toggleButton.addEventListener('click', () => {
                 item.status = item.status === 'Pending' ? 'Completed' : 'Pending';
-                button.textContent = `Mark as ${item.status === 'Pending' ? 'Completed' : 'Pending'}`;
-                // Visually update the card or move it (for a real app, you'd update a backend/state)
-                card.classList.toggle('opacity-50'); // Example: fade out completed items
-                card.classList.toggle('line-through'); // Example: strike through completed items
-                console.log(`${item.renter}'s ${type} for ${item.camera} is now ${item.status}.`);
+                saveData(); // Save changes to localStorage
+                renderItems(type === 'delivery' ? deliveries : retrievals, type === 'delivery' ? 'delivery-list' : 'retrieval-list', type); // Re-render to update visual status
             });
+            actionsDiv.appendChild(toggleButton);
 
-            card.appendChild(button);
+            const deleteButton = document.createElement('button');
+            deleteButton.className = `px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200`;
+            deleteButton.textContent = `Delete`;
+
+            deleteButton.addEventListener('click', () => {
+                if (confirm(`Are you sure you want to delete ${item.renter}'s ${type} item?`)) { // Using confirm for simplicity
+                    if (type === 'delivery') {
+                        deliveries = deliveries.filter(d => d.id !== item.id);
+                    } else {
+                        retrievals = retrievals.filter(r => r.id !== item.id);
+                    }
+                    saveData(); // Save changes to localStorage
+                    renderItems(type === 'delivery' ? deliveries : retrievals, type === 'delivery' ? 'delivery-list' : 'retrieval-list', type); // Re-render
+                }
+            });
+            actionsDiv.appendChild(deleteButton);
+
+            card.appendChild(actionsDiv);
             return card;
         }
 
-        // Render delivery items
-        const deliveryListContainer = document.getElementById('delivery-list');
-        deliveries.forEach(item => {
-            deliveryListContainer.appendChild(createRentalCard(item, 'delivery'));
+        // Add New Delivery Item
+        document.getElementById('add-delivery-btn').addEventListener('click', () => {
+            const renter = document.getElementById('delivery-renter-name').value;
+            const camera = document.getElementById('delivery-camera-model').value;
+            const date = document.getElementById('delivery-date').value;
+
+            if (renter && camera && date) {
+                const newItem = {
+                    id: `d${Date.now()}`, // Unique ID based on timestamp
+                    renter,
+                    camera,
+                    date,
+                    status: 'Pending'
+                };
+                deliveries.push(newItem);
+                saveData(); // Save changes to localStorage
+                renderItems(deliveries, 'delivery-list', 'delivery');
+                // Clear input fields
+                document.getElementById('delivery-renter-name').value = '';
+                document.getElementById('delivery-camera-model').value = '';
+                document.getElementById('delivery-date').value = '';
+            } else {
+                alert('Please fill in all delivery fields.'); // Using alert for simplicity
+            }
         });
 
-        // Render retrieval items
-        const retrievalListContainer = document.getElementById('retrieval-list');
-        retrievals.forEach(item => {
-            retrievalListContainer.appendChild(createRentalCard(item, 'retrieval'));
+        // Add New Retrieval Item
+        document.getElementById('add-retrieval-btn').addEventListener('click', () => {
+            const renter = document.getElementById('retrieval-renter-name').value;
+            const camera = document.getElementById('retrieval-camera-model').value;
+            const date = document.getElementById('retrieval-date').value;
+
+            if (renter && camera && date) {
+                const newItem = {
+                    id: `r${Date.now()}`, // Unique ID based on timestamp
+                    renter,
+                    camera,
+                    date,
+                    status: 'Pending'
+                };
+                retrievals.push(newItem);
+                saveData(); // Save changes to localStorage
+                renderItems(retrievals, 'retrieval-list', 'retrieval');
+                // Clear input fields
+                document.getElementById('retrieval-renter-name').value = '';
+                document.getElementById('retrieval-camera-model').value = '';
+                document.getElementById('retrieval-date').value = '';
+            } else {
+                alert('Please fill in all retrieval fields.'); // Using alert for simplicity
+            }
         });
 
-        // Optional: Add a simple message box function instead of alert()
-        function showMessageBox(message) {
-            const messageBox = document.createElement('div');
-            messageBox.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-            messageBox.innerHTML = `
-                <div class="bg-white p-6 rounded-lg shadow-lg text-center max-w-sm mx-auto">
-                    <p class="text-lente-primary text-lg mb-4">${message}</p>
-                    <button class="px-4 py-2 bg-lente-primary text-white rounded-md hover:bg-opacity-90 transition-colors duration-200" onclick="this.parentNode.parentNode.remove()">OK</button>
-                </div>
-            `;
-            document.body.appendChild(messageBox);
-        }
-
-        // Example usage of message box (if needed for future features)
-        // showMessageBox("Welcome to your Lente Lumina Tracker!");
+        // Initial render when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            renderItems(deliveries, 'delivery-list', 'delivery');
+            renderItems(retrievals, 'retrieval-list', 'retrieval');
+        });
 
     </script>
 </body>
