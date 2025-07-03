@@ -6,8 +6,7 @@
     <title>Lente Lumina Rental Tracker</title>
     <!-- Tailwind CSS CDN for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter for body, Lora for headings -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -52,22 +51,6 @@
             width: 400px;
             text-align: center;
         }
-        /* New font for headings */
-        .font-lora {
-            font-family: 'Lora', serif;
-        }
-        /* Animation for new cards */
-        .animate-fade-in-up {
-            animation: fadeInUp 0.5s ease-out forwards;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-4 sm:p-6 lg:p-8">
@@ -75,11 +58,16 @@
     <!-- Header Section -->
     <header class="w-full max-w-4xl bg-white rounded-xl shadow-lente p-6 mb-8 flex flex-col sm:flex-row items-center justify-center sm:justify-between">
         <div class="flex items-center space-x-3 mb-4 sm:mb-0">
-            <!-- Lente Lumina Logo Image -->
-            <img src="image_1a9098.jpg" alt="Lente Lumina Logo" class="w-12 h-12 rounded-full object-cover">
-            <h1 class="text-3xl font-bold text-lente-primary font-lora">Lenté Lumina</h1>
+            <!-- Logo-inspired icon (simple shutter/lens SVG) -->
+            <svg class="w-10 h-10 text-lente-primary" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/>
+                <path d="M12 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/>
+                <path d="M12 4.5a.5.5 0 01.5.5v1a.5.5 0 01-1 0v-1a.5.5 0 01.5-.5zM12 17.5a.5.5 0 01.5.5v1a.5.5 0 01-1 0v-1a.5.5 0 01.5-.5zM19.5 12a.5.5 0 01.5-.5h1a.5.5 0 010 1h-1a.5.5 0 01-.5-.5zM4.5 12a.5.5 0 01.5-.5h1a.5.5 0 010 1h-1a.5.5 0 01-.5-.5zM16.5 7.5a.5.5 0 01.35-.15l.707-.707a.5.5 0 01.707.707l-.707.707a.5.5 0 01-.707-.707zM7.5 16.5a.5.5 0 01-.35.15l-.707.707a.5.5 0 01-.707-.707l.707-.707a.5.5 0 01.707.707zM16.5 16.5a.5.5 0 01.35.15l.707.707a.5.5 0 01-.707.707l-.707-.707a.5.5 0 01-.35-.15zM7.5 7.5a.5.5 0 01-.35-.15l-.707-.707a.5.5 0 01.707-.707l.707.707a.5.5 0 01.35.15z"/>
+            </svg>
+            <h1 class="text-3xl font-bold text-lente-primary">Lenté Lumina</h1>
         </div>
-        <p class="text-lg text-lente-primary text-center sm:text-right">Where Light Meets Lens.<br>Rental Tracker</p>
+        <p class="text-lg text-lente-primary text-center sm:text-right">Where Light Meets Lens. Rental Tracker.</p>
     </header>
 
     <!-- Main Tracker Grid -->
@@ -163,23 +151,10 @@
         </div>
     </div>
 
-    <script type="module">
-        // Firebase SDK imports
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, onSnapshot, query, doc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Global variables provided by the Canvas environment
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-
-        let userId = null; // Will store the current user's ID
+    <script>
+        // Initialize data from localStorage or use empty arrays if nothing is stored
+        let deliveries = JSON.parse(localStorage.getItem('lenteLuminaDeliveries')) || [];
+        let retrievals = JSON.parse(localStorage.getItem('lenteLuminaRetrievals')) || [];
 
         // Function to show custom alert dialog
         function showAlertDialog(message) {
@@ -214,26 +189,43 @@
             document.getElementById('alertDialog').classList.add('hidden');
         });
 
-        // Function to sort rental items by date and then time
-        const sortItems = (list) => {
-            return list.sort((a, b) => {
-                const dateA = new Date(a.date);
-                const dateB = new Date(b.date);
+        // Function to save data to localStorage and re-render all lists
+        function saveData() {
+            localStorage.setItem('lenteLuminaDeliveries', JSON.stringify(deliveries));
+            localStorage.setItem('lenteLuminaRetrievals', JSON.stringify(retrievals));
+            refreshLists(); // Call refreshLists after saving
+        }
 
-                if (dateA.getTime() !== dateB.getTime()) {
-                    return dateA.getTime() - dateB.getTime();
-                }
+        // Function to sort and render lists
+        function refreshLists() {
+            const sortItems = (list) => {
+                return list.sort((a, b) => {
+                    // Primary sort by date
+                    const dateA = new Date(a.date);
+                    const dateB = new Date(b.date);
 
-                return a.time.localeCompare(b.time);
-            });
-        };
+                    if (dateA.getTime() !== dateB.getTime()) {
+                        return dateA.getTime() - dateB.getTime();
+                    }
+
+                    // Secondary sort by time if dates are the same
+                    // Compare time strings directly (e.g., "14:30" vs "09:00")
+                    return a.time.localeCompare(b.time);
+                });
+            };
+
+            deliveries = sortItems(deliveries);
+            retrievals = sortItems(retrievals);
+
+            renderItems(deliveries, 'delivery-list', 'delivery');
+            renderItems(retrievals, 'retrieval-list', 'retrieval');
+        }
 
         // Function to render all items in a list
         function renderItems(list, containerId, type) {
             const container = document.getElementById(containerId);
             container.innerHTML = ''; // Clear existing items
-            const sortedList = sortItems(list); // Sort before rendering
-            sortedList.forEach(item => {
+            list.forEach(item => {
                 container.appendChild(createRentalCard(item, type));
             });
         }
@@ -242,18 +234,13 @@
         function createRentalCard(item, type) {
             const card = document.createElement('div');
             card.id = `item-${item.id}`; // Unique ID for each card
-            // Added animate-fade-in-up for new entry animation and hover effects
-            card.className = `bg-lente-accent bg-opacity-30 p-4 rounded-lg shadow-sm border border-lente-accent flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0 animate-fade-in-up hover:scale-102 hover:shadow-lg transition-all duration-300 ${item.status === 'Completed' ? 'opacity-50 line-through' : ''}`;
-
-            // Format date to DD-MM-YYYY
-            const [year, month, day] = item.date.split('-');
-            const formattedDate = `${day}-${month}-${year}`;
+            card.className = `bg-lente-accent bg-opacity-30 p-4 rounded-lg shadow-sm border border-lente-accent flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0 ${item.status === 'Completed' ? 'opacity-50 line-through' : ''}`;
 
             const detailsHtml = `
                 <div>
                     <p class="font-medium text-lente-primary text-lg">${item.renter}</p>
                     <p class="text-lente-primary text-sm">Camera: ${item.camera}</p>
-                    <p class="text-lente-primary text-sm">${type === 'delivery' ? 'Deliver By:' : 'Retrieve By:'} <span class="font-semibold">${formattedDate} ${item.time}</span></p>
+                    <p class="text-lente-primary text-sm">${type === 'delivery' ? 'Deliver By:' : 'Retrieve By:'} <span class="font-semibold">${item.date} ${item.time}</span></p>
                     <p class="text-lente-primary text-sm">Courier: <span class="font-semibold">${item.courierType || 'N/A'}</span></p>
                 </div>
             `;
@@ -266,19 +253,9 @@
             toggleButton.className = `px-4 py-2 bg-lente-primary text-white rounded-md hover:bg-opacity-90 transition-colors duration-200`;
             toggleButton.textContent = `Mark as ${item.status === 'Pending' ? 'Completed' : 'Pending'}`;
 
-            toggleButton.addEventListener('click', async () => {
-                // Update status in Firestore
-                // Corrected collection path to use 'deliveries' or 'retrievals' explicitly
-                const collectionName = type === 'delivery' ? 'deliveries' : 'retrievals';
-                const itemRef = doc(db, `artifacts/${appId}/users/${userId}/${collectionName}`, item.id);
-                try {
-                    await updateDoc(itemRef, {
-                        status: item.status === 'Pending' ? 'Completed' : 'Pending'
-                    });
-                } catch (e) {
-                    console.error("Error updating document: ", e);
-                    showAlertDialog("Failed to update item status. Please try again.");
-                }
+            toggleButton.addEventListener('click', () => {
+                item.status = item.status === 'Pending' ? 'Completed' : 'Pending';
+                saveData(); // Save changes to localStorage and refresh views
             });
             actionsDiv.appendChild(toggleButton);
 
@@ -287,18 +264,14 @@
             deleteButton.textContent = `Delete`;
 
             deleteButton.addEventListener('click', () => {
-                showConfirmDialog(`Are you sure you want to delete ${item.renter}'s ${type} item?`, async (confirmed) => {
+                showConfirmDialog(`Are you sure you want to delete ${item.renter}'s ${type} item?`, (confirmed) => {
                     if (confirmed) {
-                        // Delete from Firestore
-                        // Corrected collection path to use 'deliveries' or 'retrievals' explicitly
-                        const collectionName = type === 'delivery' ? 'deliveries' : 'retrievals';
-                        const itemRef = doc(db, `artifacts/${appId}/users/${userId}/${collectionName}`, item.id);
-                        try {
-                            await deleteDoc(itemRef);
-                        } catch (e) {
-                            console.error("Error removing document: ", e);
-                            showAlertDialog("Failed to delete item. Please try again.");
+                        if (type === 'delivery') {
+                            deliveries = deliveries.filter(d => d.id !== item.id);
+                        } else {
+                            retrievals = retrievals.filter(r => r.id !== item.id);
                         }
+                        saveData(); // Save changes to localStorage and refresh views
                     }
                 });
             });
@@ -309,118 +282,72 @@
         }
 
         // Add New Delivery Item
-        document.getElementById('add-delivery-btn').addEventListener('click', async () => {
+        document.getElementById('add-delivery-btn').addEventListener('click', () => {
             const renter = document.getElementById('delivery-renter-name').value;
-            const camera = document.getElementById('delivery-camera-model').value;
+            const camera = document.getElementById('delivery-camera-model').value; // Now a select
             const date = document.getElementById('delivery-date').value;
             const time = document.getElementById('delivery-time').value;
             const courierType = document.getElementById('delivery-courier-type').value;
 
             if (renter && camera && date && time && courierType) {
                 const newItem = {
+                    id: `d${Date.now()}`,
                     renter,
                     camera,
                     date,
                     time,
                     courierType,
-                    status: 'Pending',
-                    createdAt: new Date() // Add a timestamp for potential future sorting/ordering
+                    status: 'Pending'
                 };
-                try {
-                    await addDoc(collection(db, `artifacts/${appId}/users/${userId}/deliveries`), newItem);
-                    // Clear input fields after successful addition
-                    document.getElementById('delivery-renter-name').value = '';
-                    document.getElementById('delivery-camera-model').value = '';
-                    document.getElementById('delivery-date').value = '';
-                    document.getElementById('delivery-time').value = '';
-                    document.getElementById('delivery-courier-type').value = '';
-                } catch (e) {
-                    console.error("Error adding document: ", e);
-                    showAlertDialog("Failed to add delivery. Please try again.");
-                }
+                deliveries.push(newItem);
+                saveData(); // Saves data and calls refreshAllViews
+                // Clear input fields
+                document.getElementById('delivery-renter-name').value = '';
+                document.getElementById('delivery-camera-model').value = ''; // Clear select input
+                document.getElementById('delivery-date').value = '';
+                document.getElementById('delivery-time').value = '';
+                document.getElementById('delivery-courier-type').value = '';
             } else {
                 showAlertDialog('Please fill in all delivery fields, including courier type.');
             }
         });
 
         // Add New Retrieval Item
-        document.getElementById('add-retrieval-btn').addEventListener('click', async () => {
+        document.getElementById('add-retrieval-btn').addEventListener('click', () => {
             const renter = document.getElementById('retrieval-renter-name').value;
-            const camera = document.getElementById('retrieval-camera-model').value;
+            const camera = document.getElementById('retrieval-camera-model').value; // Now a select
             const date = document.getElementById('retrieval-date').value;
             const time = document.getElementById('retrieval-time').value;
             const courierType = document.getElementById('retrieval-courier-type').value;
 
             if (renter && camera && date && time && courierType) {
                 const newItem = {
+                    id: `r${Date.now()}`,
                     renter,
                     camera,
                     date,
                     time,
                     courierType,
-                    status: 'Pending',
-                    createdAt: new Date() // Add a timestamp
+                    status: 'Pending'
                 };
-                try {
-                    await addDoc(collection(db, `artifacts/${appId}/users/${userId}/retrievals`), newItem);
-                    // Clear input fields after successful addition
-                    document.getElementById('retrieval-renter-name').value = '';
-                    document.getElementById('retrieval-camera-model').value = '';
-                    document.getElementById('retrieval-date').value = '';
-                    document.getElementById('retrieval-time').value = '';
-                    document.getElementById('retrieval-courier-type').value = '';
-                } catch (e) {
-                    console.error("Error adding document: ", e);
-                    showAlertDialog("Failed to add retrieval. Please try again.");
-                }
+                retrievals.push(newItem);
+                saveData(); // Saves data and calls refreshAllViews
+                // Clear input fields
+                document.getElementById('retrieval-renter-name').value = '';
+                document.getElementById('retrieval-camera-model').value = ''; // Clear select input
+                document.getElementById('retrieval-date').value = '';
+                document.getElementById('retrieval-time').value = '';
+                document.getElementById('retrieval-courier-type').value = '';
             } else {
                 showAlertDialog('Please fill in all retrieval fields, including courier type.');
             }
         });
 
-        // Authentication state listener and initial data load
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                userId = user.uid;
-
-                // Set up real-time listeners for deliveries
-                onSnapshot(query(collection(db, `artifacts/${appId}/users/${userId}/deliveries`)), (snapshot) => {
-                    const deliveriesData = [];
-                    snapshot.forEach((doc) => {
-                        deliveriesData.push({ id: doc.id, ...doc.data() });
-                    });
-                    renderItems(deliveriesData, 'delivery-list', 'delivery');
-                }, (error) => {
-                    console.error("Error listening to deliveries: ", error);
-                    showAlertDialog("Failed to load deliveries. Please check your connection.");
-                });
-
-                // Set up real-time listeners for retrievals
-                onSnapshot(query(collection(db, `artifacts/${appId}/users/${userId}/retrievals`)), (snapshot) => {
-                    const retrievalsData = [];
-                    snapshot.forEach((doc) => {
-                        retrievalsData.push({ id: doc.id, ...doc.data() });
-                    });
-                    renderItems(retrievalsData, 'retrieval-list', 'retrieval');
-                }, (error) => {
-                    console.error("Error listening to retrievals: ", error);
-                    showAlertDialog("Failed to load retrievals. Please check your connection.");
-                });
-
-            } else {
-                // If no user is authenticated, sign in anonymously or with custom token
-                try {
-                    if (initialAuthToken) {
-                        await signInWithCustomToken(auth, initialAuthToken);
-                    } else {
-                        await signInAnonymously(auth);
-                    }
-                } catch (error) {
-                    console.error("Error during authentication:", error);
-                    showAlertDialog("Authentication failed. Please refresh the page.");
-                }
-            }
+        // Initial render when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            saveData(); // Initial render of lists based on saved data
         });
+
     </script>
 </body>
 </html>
