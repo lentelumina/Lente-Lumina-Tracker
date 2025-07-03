@@ -68,6 +68,11 @@
                 transform: translateY(0);
             }
         }
+        /* Focus style for inputs */
+        input:focus, select:focus, textarea:focus {
+            border-color: #8B4513; /* Primary color on focus */
+            box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.2); /* Subtle ring on focus */
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-4 sm:p-6 lg:p-8">
@@ -84,7 +89,10 @@
             </svg>
             <h1 class="text-3xl font-bold text-lente-primary font-lora">Lenté Lumina</h1>
         </div>
-        <p class="text-lg text-lente-primary text-center sm:text-right">Where Light Meets Lens.<br>Rental Tracker</p>
+        <div class="flex flex-col items-center sm:items-end">
+            <p class="text-lg text-lente-primary text-center sm:text-right">Where Light Meets Lens.<br>Rental Tracker</p>
+            <p id="user-id-display" class="text-xs text-gray-500 mt-1"></p>
+        </div>
     </header>
 
     <!-- Main Tracker Grid -->
@@ -92,10 +100,10 @@
 
         <!-- Deliveries Section -->
         <section class="bg-white rounded-xl shadow-lente p-6">
-            <h2 class="text-2xl font-semibold text-lente-primary mb-5 border-b-2 border-lente-accent pb-3">For Delivery 🚚</h2>
-            <div class="mb-4 space-y-2">
-                <input type="text" id="delivery-renter-name" placeholder="Renter Name" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
-                <select id="delivery-camera-model" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+            <h2 class="text-2xl font-semibold text-lente-primary mb-5 border-b-2 border-lente-accent pb-3">For Delivery</h2>
+            <div class="mb-4 space-y-3"> <!-- Increased space-y for better visual separation -->
+                <input type="text" id="delivery-renter-name" placeholder="Renter Name" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lente-primary transition-all duration-200">
+                <select id="delivery-camera-model" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lente-primary transition-all duration-200">
                     <option value="">Select Camera Model</option>
                     <option value="Canon PowerShot G7 X Mark II">Canon PowerShot G7 X Mark II</option>
                     <option value="Canon PowerShot G7 X Mark III">Canon PowerShot G7 X Mark III</option>
@@ -105,14 +113,14 @@
                     <option value="Insta360 X5">Insta360 X5</option>
                     <option value="DJI Mini 4 Pro">DJI Mini 4 Pro</option>
                 </select>
-                <input type="date" id="delivery-date" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
-                <input type="time" id="delivery-time" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
-                <select id="delivery-courier-type" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+                <input type="date" id="delivery-date" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lente-primary transition-all duration-200">
+                <input type="time" id="delivery-time" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lente-primary transition-all duration-200">
+                <select id="delivery-courier-type" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lente-primary transition-all duration-200">
                     <option value="">Select Courier Type</option>
                     <option value="Personal">Personal</option>
                     <option value="Third-Party Courier">Third-Party Courier</option>
                 </select>
-                <button id="add-delivery-btn" class="w-full px-4 py-2 bg-lente-primary text-white rounded-md hover:bg-opacity-90 transition-colors duration-200">Add Delivery</button>
+                <button id="add-delivery-btn" class="w-full px-4 py-3 bg-lente-primary text-white rounded-md hover:bg-opacity-90 transition-colors duration-200 font-semibold text-lg">Add Delivery</button>
             </div>
             <div id="delivery-list" class="space-y-4">
                 <!-- Delivery items will be rendered here by JavaScript -->
@@ -121,10 +129,10 @@
 
         <!-- Retrievals Section -->
         <section class="bg-white rounded-xl shadow-lente p-6">
-            <h2 class="text-2xl font-semibold text-lente-primary mb-5 border-b-2 border-lente-accent pb-3">For Retrieval 📦</h2>
-            <div class="mb-4 space-y-2">
-                <input type="text" id="retrieval-renter-name" placeholder="Renter Name" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
-                <select id="retrieval-camera-model" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+            <h2 class="text-2xl font-semibold text-lente-primary mb-5 border-b-2 border-lente-accent pb-3">For Retrieval</h2>
+            <div class="mb-4 space-y-3"> <!-- Increased space-y for better visual separation -->
+                <input type="text" id="retrieval-renter-name" placeholder="Renter Name" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lente-primary transition-all duration-200">
+                <select id="retrieval-camera-model" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lente-primary transition-all duration-200">
                     <option value="">Select Camera Model</option>
                     <option value="Canon PowerShot G7 X Mark II">Canon PowerShot G7 X Mark II</option>
                     <option value="Canon PowerShot G7 X Mark III">Canon PowerShot G7 X Mark III</option>
@@ -134,14 +142,14 @@
                     <option value="Insta360 X5">Insta360 X5</option>
                     <option value="DJI Mini 4 Pro">DJI Mini 4 Pro</option>
                 </select>
-                <input type="date" id="retrieval-date" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
-                <input type="time" id="retrieval-time" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
-                <select id="retrieval-courier-type" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+                <input type="date" id="retrieval-date" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lente-primary transition-all duration-200">
+                <input type="time" id="retrieval-time" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lente-primary transition-all duration-200">
+                <select id="retrieval-courier-type" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lente-primary transition-all duration-200">
                     <option value="">Select Courier Type</option>
                     <option value="Personal">Personal</option>
                     <option value="Third-Party Courier">Third-Party Courier</option>
                 </select>
-                <button id="add-retrieval-btn" class="w-full px-4 py-2 bg-lente-primary text-white rounded-md hover:bg-opacity-90 transition-colors duration-200">Add Retrieval</button>
+                <button id="add-retrieval-btn" class="w-full px-4 py-3 bg-lente-primary text-white rounded-md hover:bg-opacity-90 transition-colors duration-200 font-semibold text-lg">Add Retrieval</button>
             </div>
             <div id="retrieval-list" class="space-y-4">
                 <!-- Retrieval items will be rendered here by JavaScript -->
@@ -185,6 +193,7 @@
         const auth = getAuth(app);
 
         let userId = null; // Will store the current user's ID
+        const userIdDisplay = document.getElementById('user-id-display'); // Get the user ID display element
 
         // Function to show custom alert dialog
         function showAlertDialog(message) {
@@ -396,6 +405,7 @@
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 userId = user.uid;
+                userIdDisplay.textContent = `User ID: ${userId}`; // Display the user ID
 
                 // Set up real-time listeners for deliveries
                 onSnapshot(query(collection(db, `artifacts/${appId}/users/${userId}/deliveries`)), (snapshot) => {
@@ -419,7 +429,8 @@
                 }, (error) => {
                     console.error("Error listening to retrievals: ", error);
                     showAlertDialog("Failed to load retrievals. Please check your connection.");
-                });
+                }
+                );
 
             } else {
                 // If no user is authenticated, sign in anonymously or with custom token
