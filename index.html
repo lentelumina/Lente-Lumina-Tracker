@@ -178,14 +178,8 @@
 
         // Global variables provided by the Canvas environment
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = {
-  apiKey: "AIzaSyBt1zKB8ZyAsesmyCJlm4EslUlr2jT5Aj8",
-  authDomain: "mylenteluminatracker.firebaseapp.com",
-  projectId: "mylenteluminatracker",
-  storageBucket: "mylenteluminatracker.firebasestorage.app",
-  messagingSenderId: "1097471681574",
-  appId: "1:1097471681574:web:b1d517671e2380e63032e7",
-  measurementId: "G-N9XYCHCB4R"
+        // Corrected firebaseConfig initialization
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
         // Initialize Firebase
