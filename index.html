@@ -243,6 +243,18 @@
             });
         }
 
+        // Helper function to convert 24-hour time to 12-hour AM/PM format
+        function formatTimeToAmPm(time24) {
+            if (!time24) return 'N/A';
+            const [hours, minutes] = time24.split(':');
+            let h = parseInt(hours, 10);
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            h = h % 12;
+            h = h ? h : 12; // The hour '0' should be '12'
+            const m = minutes.padStart(2, '0');
+            return `${h}:${m} ${ampm}`;
+        }
+
         // Function to create a card for a rental item
         function createRentalCard(item, type) {
             const card = document.createElement('div');
@@ -253,12 +265,13 @@
             // Format date to DD-MM-YYYY
             const [year, month, day] = item.date.split('-');
             const formattedDate = `${day}-${month}-${year}`;
+            const formattedTime = formatTimeToAmPm(item.time); // Format time to AM/PM
 
             const detailsHtml = `
                 <div>
                     <p class="font-medium text-lente-primary text-lg">${item.renter}</p>
                     <p class="text-lente-primary text-sm">Camera: ${item.camera}</p>
-                    <p class="text-lente-primary text-sm">${type === 'delivery' ? 'Deliver By:' : 'Retrieve By:'} <span class="font-semibold">${formattedDate} ${item.time}</span></p>
+                    <p class="text-lente-primary text-sm">${type === 'delivery' ? 'Deliver By:' : 'Retrieve By:'} <span class="font-semibold">${formattedDate} ${formattedTime}</span></p>
                     <p class="text-lente-primary text-sm">Courier: <span class="font-semibold">${item.courierType || 'N/A'}</span></p>
                 </div>
             `;
