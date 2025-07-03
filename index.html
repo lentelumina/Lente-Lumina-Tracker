@@ -45,7 +45,7 @@
             </svg>
             <h1 class="text-3xl font-bold text-lente-primary">Lente Lumina</h1>
         </div>
-        <p class="text-lg text-lente-primary text-center sm:text-right">Where Light Meets Lens. Rental Tracker.</p>
+        <p class="text-lg text-lente-primary text-center sm:text-right">Where Light Meets Lens.<br>Rental Tracker</p>
     </header>
 
     <!-- Main Tracker Grid -->
@@ -124,11 +124,21 @@
             renderItems(retrievals, 'retrieval-list', 'retrieval');
         }
 
+        // Function to sort rental items by date and then time
+        const sortItems = (list) => {
+            return list.sort((a, b) => {
+                const dateA = new Date(`${a.date}T${a.time}`);
+                const dateB = new Date(`${b.date}T${b.time}`);
+                return dateA.getTime() - dateB.getTime();
+            });
+        };
+
         // Function to render all items in a list
         function renderItems(list, containerId, type) {
             const container = document.getElementById(containerId);
             container.innerHTML = ''; // Clear existing items
-            list.forEach(item => {
+            const sortedList = sortItems(list); // Sort before rendering
+            sortedList.forEach(item => {
                 container.appendChild(createRentalCard(item, type));
             });
         }
