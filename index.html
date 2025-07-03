@@ -13,30 +13,31 @@
             /* Custom background color matching the logo's light peach/beige */
             background-color: #FDF7F0; /* A soft, light peach/beige */
         }
-        /* Custom colors based on the Lente Lumina logo */
+        /* Custom colors based on the Lente Lumina logo, adjusted for a cuter theme */
         .text-lente-primary {
-            color: #8B4513; /* A warm brown/sienna for text and accents */
+            color: #A0522D; /* Softer sienna brown for text and accents */
         }
         .bg-lente-primary {
-            background-color: #8B4513; /* A warm brown/sienna for backgrounds */
+            background-color: #A0522D; /* Softer sienna brown for backgrounds */
         }
         .bg-lente-accent {
-            background-color: #E6B88C; /* A slightly darker, muted orange/brown for subtle accents */
+            background-color: #FAEBD7; /* Very light, warm antique white for subtle accents */
         }
         .border-lente-accent {
-            border-color: #E6B88C;
+            border-color: #FDE68A; /* Light gold/yellow for softer borders */
         }
         .shadow-lente {
-            box-shadow: 0 4px 6px -1px rgba(139, 69, 19, 0.1), 0 2px 4px -1px rgba(139, 69, 19, 0.06);
+            box-shadow: 0 4px 6px -1px rgba(160, 82, 45, 0.1), 0 2px 4px -1px rgba(160, 82, 45, 0.06);
         }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-4 sm:p-6 lg:p-8">
 
     <!-- Header Section -->
-    <header class="w-full max-w-4xl bg-white rounded-xl shadow-lente p-6 mb-8 flex flex-col sm:flex-row items-center justify-center sm:justify-between">
+    <header class="w-full max-w-4xl bg-white rounded-3xl shadow-lente p-6 mb-8 flex flex-col sm:flex-row items-center justify-center sm:justify-between">
         <div class="flex items-center space-x-3 mb-4 sm:mb-0">
-            <!-- Lente Lumina Logo Image (removed as per request) -->
+            <!-- Lente Lumina Logo Image (image_274ada.png) -->
+            <img src="image_274ada.png" alt="Lente Lumina Logo" class="w-12 h-12 rounded-full object-cover">
             <h1 class="text-3xl font-bold text-lente-primary">Lente Lumina</h1>
         </div>
         <p class="text-lg text-lente-primary text-center sm:text-right">Where Light Meets Lens. Rental Tracker.</p>
@@ -46,11 +47,11 @@
     <main class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6">
 
         <!-- Deliveries Section -->
-        <section class="bg-white rounded-xl shadow-lente p-6">
-            <h2 class="text-2xl font-semibold text-lente-primary mb-5 border-b-2 border-lente-accent pb-3">For Delivery 🚚</h2>
+        <section class="bg-white rounded-3xl shadow-lente p-6">
+            <h2 class="text-2xl font-semibold text-lente-primary mb-5 border-b-2 border-lente-accent pb-3">For Delivery</h2>
             <div class="mb-4 space-y-2">
-                <input type="text" id="delivery-renter-name" placeholder="Renter Name" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
-                <select id="delivery-camera-model" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+                <input type="text" id="delivery-renter-name" placeholder="Renter Name" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lente-primary">
+                <select id="delivery-camera-model" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lente-primary">
                     <option value="">Select Camera Model</option>
                     <option value="Canon PowerShot G7 X Mark II">Canon PowerShot G7 X Mark II</option>
                     <option value="Canon PowerShot G7 X Mark III">Canon PowerShot G7 X Mark III</option>
@@ -60,14 +61,14 @@
                     <option value="Insta360 X5">Insta360 X5</option>
                     <option value="DJI Mini 4 Pro">DJI Mini 4 Pro</option>
                 </select>
-                <input type="date" id="delivery-date" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
-                <input type="time" id="delivery-time" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
-                <select id="delivery-courier-type" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+                <input type="date" id="delivery-date" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lente-primary">
+                <input type="time" id="delivery-time" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lente-primary">
+                <select id="delivery-courier-type" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lente-primary">
                     <option value="">Select Courier Type</option>
                     <option value="Personal">Personal</option>
                     <option value="Third-Party Courier">Third-Party Courier</option>
                 </select>
-                <button id="add-delivery-btn" class="w-full px-4 py-2 bg-lente-primary text-white rounded-md hover:bg-opacity-90 transition-colors duration-200">Add Delivery</button>
+                <button id="add-delivery-btn" class="w-full px-4 py-2 bg-lente-primary text-white rounded-lg hover:bg-opacity-90 transition-colors duration-200">Add Delivery</button>
             </div>
             <div id="delivery-list" class="space-y-4">
                 <!-- Delivery items will be rendered here by JavaScript -->
@@ -75,11 +76,11 @@
         </section>
 
         <!-- Retrievals Section -->
-        <section class="bg-white rounded-xl shadow-lente p-6">
-            <h2 class="text-2xl font-semibold text-lente-primary mb-5 border-b-2 border-lente-accent pb-3">For Retrieval 📦</h2>
+        <section class="bg-white rounded-3xl shadow-lente p-6">
+            <h2 class="text-2xl font-semibold text-lente-primary mb-5 border-b-2 border-lente-accent pb-3">For Retrieval</h2>
             <div class="mb-4 space-y-2">
-                <input type="text" id="retrieval-renter-name" placeholder="Renter Name" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
-                <select id="retrieval-camera-model" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+                <input type="text" id="retrieval-renter-name" placeholder="Renter Name" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lente-primary">
+                <select id="retrieval-camera-model" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lente-primary">
                     <option value="">Select Camera Model</option>
                     <option value="Canon PowerShot G7 X Mark II">Canon PowerShot G7 X Mark II</option>
                     <option value="Canon PowerShot G7 X Mark III">Canon PowerShot G7 X Mark III</option>
@@ -89,14 +90,14 @@
                     <option value="Insta360 X5">Insta360 X5</option>
                     <option value="DJI Mini 4 Pro">DJI Mini 4 Pro</option>
                 </select>
-                <input type="date" id="retrieval-date" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
-                <input type="time" id="retrieval-time" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
-                <select id="retrieval-courier-type" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+                <input type="date" id="retrieval-date" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lente-primary">
+                <input type="time" id="retrieval-time" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lente-primary">
+                <select id="retrieval-courier-type" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lente-primary">
                     <option value="">Select Courier Type</option>
                     <option value="Personal">Personal</option>
                     <option value="Third-Party Courier">Third-Party Courier</option>
                 </select>
-                <button id="add-retrieval-btn" class="w-full px-4 py-2 bg-lente-primary text-white rounded-md hover:bg-opacity-90 transition-colors duration-200">Add Retrieval</button>
+                <button id="add-retrieval-btn" class="w-full px-4 py-2 bg-lente-primary text-white rounded-lg hover:bg-opacity-90 transition-colors duration-200">Add Retrieval</button>
             </div>
             <div id="retrieval-list" class="space-y-4">
                 <!-- Retrieval items will be rendered here by JavaScript -->
@@ -146,20 +147,20 @@
         function renderItems(list, containerId, type) {
             const container = document.getElementById(containerId);
             container.innerHTML = ''; // Clear existing items
-            list.forEach((item, index) => { // Pass index to createRentalCard to maintain sequential numbering
-                container.appendChild(createRentalCard(item, type, index + 1)); // Pass 1-based index
+            list.forEach((item) => { // Removed index parameter
+                container.appendChild(createRentalCard(item, type)); // Removed itemNumber parameter
             });
         }
 
         // Function to create a card for a rental item
-        function createRentalCard(item, type, itemNumber) { // Accept itemNumber
+        function createRentalCard(item, type) { // Removed itemNumber parameter
             const card = document.createElement('div');
             card.id = `item-${item.id}`; // Unique ID for each card
             card.className = `bg-lente-accent bg-opacity-30 p-4 rounded-lg shadow-sm border border-lente-accent flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0 ${item.status === 'Completed' ? 'opacity-50 line-through' : ''}`;
 
             const detailsHtml = `
                 <div>
-                    <p class="font-medium text-lente-primary text-lg">No. ${itemNumber} - ${item.renter}</p>
+                    <p class="font-medium text-lente-primary text-lg">${item.renter}</p>
                     <p class="text-lente-primary text-sm">Camera: ${item.camera}</p>
                     <p class="text-lente-primary text-sm">${type === 'delivery' ? 'Deliver By:' : 'Retrieve By:'} <span class="font-semibold">${item.date} ${item.time}</span></p>
                     <p class="text-lente-primary text-sm">Courier: <span class="font-semibold">${item.courierType || 'N/A'}</span></p>
@@ -171,7 +172,7 @@
             actionsDiv.className = 'flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 mt-2 sm:mt-0';
 
             const toggleButton = document.createElement('button');
-            toggleButton.className = `px-4 py-2 bg-lente-primary text-white rounded-md hover:bg-opacity-90 transition-colors duration-200`;
+            toggleButton.className = `px-4 py-2 bg-lente-primary text-white rounded-lg hover:bg-opacity-90 transition-colors duration-200`;
             toggleButton.textContent = `Mark as ${item.status === 'Pending' ? 'Completed' : 'Pending'}`;
 
             toggleButton.addEventListener('click', () => {
@@ -181,7 +182,7 @@
             actionsDiv.appendChild(toggleButton);
 
             const deleteButton = document.createElement('button');
-            deleteButton.className = `px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200`;
+            deleteButton.className = `px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200`;
             deleteButton.textContent = `Delete`;
 
             deleteButton.addEventListener('click', () => {
