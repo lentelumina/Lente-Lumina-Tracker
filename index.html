@@ -13,30 +13,58 @@
             /* Custom background color matching the logo's light peach/beige */
             background-color: #FDF7F0; /* A soft, light peach/beige */
         }
-        /* Custom colors based on the Lente Lumina logo, adjusted for a cuter theme */
+        /* Custom colors based on the Lente Lumina logo */
         .text-lente-primary {
-            color: #A0522D; /* Softer sienna brown for text and accents */
+            color: #8B4513; /* A warm brown/sienna for text and accents */
         }
         .bg-lente-primary {
-            background-color: #A0522D; /* Softer sienna brown for backgrounds */
+            background-color: #8B4513; /* A warm brown/sienna for backgrounds */
         }
         .bg-lente-accent {
-            background-color: #FAEBD7; /* Very light, warm antique white for subtle accents */
+            background-color: #E6B88C; /* A slightly darker, muted orange/brown for subtle accents */
         }
         .border-lente-accent {
-            border-color: #FDE68A; /* Light gold/yellow for softer borders */
+            border-color: #E6B88C;
         }
         .shadow-lente {
-            box-shadow: 0 4px 6px -1px rgba(160, 82, 45, 0.1), 0 2px 4px -1px rgba(160, 82, 45, 0.06);
+            box-shadow: 0 4px 6px -1px rgba(139, 69, 19, 0.1), 0 2px 4px -1px rgba(139, 69, 19, 0.06);
+        }
+        /* Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            max-width: 90%;
+            width: 400px;
+            text-align: center;
         }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-4 sm:p-6 lg:p-8">
 
     <!-- Header Section -->
-    <header class="w-full max-w-4xl bg-white rounded-3xl shadow-lente p-6 mb-8 flex flex-col sm:flex-row items-center justify-center sm:justify-between">
+    <header class="w-full max-w-4xl bg-white rounded-xl shadow-lente p-6 mb-8 flex flex-col sm:flex-row items-center justify-center sm:justify-between">
         <div class="flex items-center space-x-3 mb-4 sm:mb-0">
-            <!-- Lente Lumina Logo Image (removed) -->
+            <!-- Logo-inspired icon (simple shutter/lens SVG) -->
+            <svg class="w-10 h-10 text-lente-primary" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/>
+                <path d="M12 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/>
+                <path d="M12 4.5a.5.5 0 01.5.5v1a.5.5 0 01-1 0v-1a.5.5 0 01.5-.5zM12 17.5a.5.5 0 01.5.5v1a.5.5 0 01-1 0v-1a.5.5 0 01.5-.5zM19.5 12a.5.5 0 01.5-.5h1a.5.5 0 010 1h-1a.5.5 0 01-.5-.5zM4.5 12a.5.5 0 01.5-.5h1a.5.5 0 010 1h-1a.5.5 0 01-.5-.5zM16.5 7.5a.5.5 0 01.35-.15l.707-.707a.5.5 0 01.707.707l-.707.707a.5.5 0 01-.707-.707zM7.5 16.5a.5.5 0 01-.35.15l-.707.707a.5.5 0 01-.707-.707l.707-.707a.5.5 0 01.707.707zM16.5 16.5a.5.5 0 01.35.15l.707.707a.5.5 0 01-.707.707l-.707-.707a.5.5 0 01-.35-.15zM7.5 7.5a.5.5 0 01-.35-.15l-.707-.707a.5.5 0 01.707-.707l.707.707a.5.5 0 01.35.15z"/>
+            </svg>
             <h1 class="text-3xl font-bold text-lente-primary">Lenté Lumina</h1>
         </div>
         <p class="text-lg text-lente-primary text-center sm:text-right">Where Light Meets Lens. Rental Tracker.</p>
@@ -46,11 +74,11 @@
     <main class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6">
 
         <!-- Deliveries Section -->
-        <section class="bg-white rounded-3xl shadow-lente p-6">
+        <section class="bg-white rounded-xl shadow-lente p-6">
             <h2 class="text-2xl font-semibold text-lente-primary mb-5 border-b-2 border-lente-accent pb-3">For Delivery 🚚</h2>
             <div class="mb-4 space-y-2">
-                <input type="text" id="delivery-renter-name" placeholder="Renter Name" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lente-primary">
-                <select id="delivery-camera-model" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lente-primary">
+                <input type="text" id="delivery-renter-name" placeholder="Renter Name" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+                <select id="delivery-camera-model" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
                     <option value="">Select Camera Model</option>
                     <option value="Canon PowerShot G7 X Mark II">Canon PowerShot G7 X Mark II</option>
                     <option value="Canon PowerShot G7 X Mark III">Canon PowerShot G7 X Mark III</option>
@@ -60,14 +88,14 @@
                     <option value="Insta360 X5">Insta360 X5</option>
                     <option value="DJI Mini 4 Pro">DJI Mini 4 Pro</option>
                 </select>
-                <input type="date" id="delivery-date" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lente-primary">
-                <input type="time" id="delivery-time" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lente-primary">
-                <select id="delivery-courier-type" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lente-primary">
+                <input type="date" id="delivery-date" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+                <input type="time" id="delivery-time" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+                <select id="delivery-courier-type" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
                     <option value="">Select Courier Type</option>
                     <option value="Personal">Personal</option>
                     <option value="Third-Party Courier">Third-Party Courier</option>
                 </select>
-                <button id="add-delivery-btn" class="w-full px-4 py-2 bg-lente-primary text-white rounded-lg hover:bg-opacity-90 transition-colors duration-200">Add Delivery</button>
+                <button id="add-delivery-btn" class="w-full px-4 py-2 bg-lente-primary text-white rounded-md hover:bg-opacity-90 transition-colors duration-200">Add Delivery</button>
             </div>
             <div id="delivery-list" class="space-y-4">
                 <!-- Delivery items will be rendered here by JavaScript -->
@@ -75,11 +103,11 @@
         </section>
 
         <!-- Retrievals Section -->
-        <section class="bg-white rounded-3xl shadow-lente p-6">
+        <section class="bg-white rounded-xl shadow-lente p-6">
             <h2 class="text-2xl font-semibold text-lente-primary mb-5 border-b-2 border-lente-accent pb-3">For Retrieval 📦</h2>
             <div class="mb-4 space-y-2">
-                <input type="text" id="retrieval-renter-name" placeholder="Renter Name" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lente-primary">
-                <select id="retrieval-camera-model" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lente-primary">
+                <input type="text" id="retrieval-renter-name" placeholder="Renter Name" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+                <select id="retrieval-camera-model" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
                     <option value="">Select Camera Model</option>
                     <option value="Canon PowerShot G7 X Mark II">Canon PowerShot G7 X Mark II</option>
                     <option value="Canon PowerShot G7 X Mark III">Canon PowerShot G7 X Mark III</option>
@@ -89,14 +117,14 @@
                     <option value="Insta360 X5">Insta360 X5</option>
                     <option value="DJI Mini 4 Pro">DJI Mini 4 Pro</option>
                 </select>
-                <input type="date" id="retrieval-date" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lente-primary">
-                <input type="time" id="retrieval-time" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lente-primary">
-                <select id="retrieval-courier-type" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lente-primary">
+                <input type="date" id="retrieval-date" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+                <input type="time" id="retrieval-time" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+                <select id="retrieval-courier-type" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
                     <option value="">Select Courier Type</option>
                     <option value="Personal">Personal</option>
                     <option value="Third-Party Courier">Third-Party Courier</option>
                 </select>
-                <button id="add-retrieval-btn" class="w-full px-4 py-2 bg-lente-primary text-white rounded-lg hover:bg-opacity-90 transition-colors duration-200">Add Retrieval</button>
+                <button id="add-retrieval-btn" class="w-full px-4 py-2 bg-lente-primary text-white rounded-md hover:bg-opacity-90 transition-colors duration-200">Add Retrieval</button>
             </div>
             <div id="retrieval-list" class="space-y-4">
                 <!-- Retrieval items will be rendered here by JavaScript -->
@@ -105,10 +133,61 @@
 
     </main>
 
+    <!-- Custom Alert/Confirm Modals -->
+    <div id="alertDialog" class="modal-overlay hidden">
+        <div class="modal-content">
+            <p id="alertMessage" class="text-lente-primary text-lg mb-4"></p>
+            <button id="alertCloseBtn" class="px-6 py-2 bg-lente-primary text-white rounded-md hover:bg-opacity-90 transition-colors duration-200">OK</button>
+        </div>
+    </div>
+
+    <div id="confirmDialog" class="modal-overlay hidden">
+        <div class="modal-content">
+            <p id="confirmMessage" class="text-lente-primary text-lg mb-4"></p>
+            <div class="flex justify-center space-x-4">
+                <button id="confirmYesBtn" class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200">Yes</button>
+                <button id="confirmNoBtn" class="px-6 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 transition-colors duration-200">No</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Initialize data from localStorage or use empty arrays if nothing is stored
         let deliveries = JSON.parse(localStorage.getItem('lenteLuminaDeliveries')) || [];
         let retrievals = JSON.parse(localStorage.getItem('lenteLuminaRetrievals')) || [];
+
+        // Function to show custom alert dialog
+        function showAlertDialog(message) {
+            document.getElementById('alertMessage').textContent = message;
+            document.getElementById('alertDialog').classList.remove('hidden');
+        }
+
+        // Function to show custom confirm dialog
+        function showConfirmDialog(message, callback) {
+            document.getElementById('confirmMessage').textContent = message;
+            document.getElementById('confirmDialog').classList.remove('hidden');
+
+            const yesBtn = document.getElementById('confirmYesBtn');
+            const noBtn = document.getElementById('confirmNoBtn');
+
+            // Clear previous event listeners to prevent multiple calls
+            yesBtn.onclick = null;
+            noBtn.onclick = null;
+
+            yesBtn.onclick = () => {
+                document.getElementById('confirmDialog').classList.add('hidden');
+                callback(true);
+            };
+            noBtn.onclick = () => {
+                document.getElementById('confirmDialog').classList.add('hidden');
+                callback(false);
+            };
+        }
+
+        // Event listener for closing the alert dialog
+        document.getElementById('alertCloseBtn').addEventListener('click', () => {
+            document.getElementById('alertDialog').classList.add('hidden');
+        });
 
         // Function to save data to localStorage and re-render all lists
         function saveData() {
@@ -146,13 +225,13 @@
         function renderItems(list, containerId, type) {
             const container = document.getElementById(containerId);
             container.innerHTML = ''; // Clear existing items
-            list.forEach((item) => { // Removed index parameter
-                container.appendChild(createRentalCard(item, type)); // Removed itemNumber parameter
+            list.forEach(item => {
+                container.appendChild(createRentalCard(item, type));
             });
         }
 
         // Function to create a card for a rental item
-        function createRentalCard(item, type) { // Removed itemNumber parameter
+        function createRentalCard(item, type) {
             const card = document.createElement('div');
             card.id = `item-${item.id}`; // Unique ID for each card
             card.className = `bg-lente-accent bg-opacity-30 p-4 rounded-lg shadow-sm border border-lente-accent flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0 ${item.status === 'Completed' ? 'opacity-50 line-through' : ''}`;
@@ -171,7 +250,7 @@
             actionsDiv.className = 'flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 mt-2 sm:mt-0';
 
             const toggleButton = document.createElement('button');
-            toggleButton.className = `px-4 py-2 bg-lente-primary text-white rounded-lg hover:bg-opacity-90 transition-colors duration-200`;
+            toggleButton.className = `px-4 py-2 bg-lente-primary text-white rounded-md hover:bg-opacity-90 transition-colors duration-200`;
             toggleButton.textContent = `Mark as ${item.status === 'Pending' ? 'Completed' : 'Pending'}`;
 
             toggleButton.addEventListener('click', () => {
@@ -181,18 +260,20 @@
             actionsDiv.appendChild(toggleButton);
 
             const deleteButton = document.createElement('button');
-            deleteButton.className = `px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200`;
+            deleteButton.className = `px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200`;
             deleteButton.textContent = `Delete`;
 
             deleteButton.addEventListener('click', () => {
-                if (confirm(`Are you sure you want to delete ${item.renter}'s ${type} item?`)) {
-                    if (type === 'delivery') {
-                        deliveries = deliveries.filter(d => d.id !== item.id);
-                    } else {
-                        retrievals = retrievals.filter(r => r.id !== item.id);
+                showConfirmDialog(`Are you sure you want to delete ${item.renter}'s ${type} item?`, (confirmed) => {
+                    if (confirmed) {
+                        if (type === 'delivery') {
+                            deliveries = deliveries.filter(d => d.id !== item.id);
+                        } else {
+                            retrievals = retrievals.filter(r => r.id !== item.id);
+                        }
+                        saveData(); // Save changes to localStorage and refresh views
                     }
-                    saveData(); // Save changes to localStorage and refresh views
-                }
+                });
             });
             actionsDiv.appendChild(deleteButton);
 
@@ -219,7 +300,7 @@
                     status: 'Pending'
                 };
                 deliveries.push(newItem);
-                saveData(); // Saves data and calls refreshLists
+                saveData(); // Saves data and calls refreshAllViews
                 // Clear input fields
                 document.getElementById('delivery-renter-name').value = '';
                 document.getElementById('delivery-camera-model').value = ''; // Clear select input
@@ -227,7 +308,7 @@
                 document.getElementById('delivery-time').value = '';
                 document.getElementById('delivery-courier-type').value = '';
             } else {
-                alert('Please fill in all delivery fields, including courier type.');
+                showAlertDialog('Please fill in all delivery fields, including courier type.');
             }
         });
 
@@ -250,7 +331,7 @@
                     status: 'Pending'
                 };
                 retrievals.push(newItem);
-                saveData(); // Saves data and calls refreshLists
+                saveData(); // Saves data and calls refreshAllViews
                 // Clear input fields
                 document.getElementById('retrieval-renter-name').value = '';
                 document.getElementById('retrieval-camera-model').value = ''; // Clear select input
@@ -258,7 +339,7 @@
                 document.getElementById('retrieval-time').value = '';
                 document.getElementById('retrieval-courier-type').value = '';
             } else {
-                alert('Please fill in all retrieval fields, including courier type.');
+                showAlertDialog('Please fill in all retrieval fields, including courier type.');
             }
         });
 
