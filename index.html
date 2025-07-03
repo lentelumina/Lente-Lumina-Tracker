@@ -133,17 +133,40 @@
             });
         }
 
+        // Helper function to format date to dd-mm-yy
+        function formatDateToDDMMYY(dateString) {
+            if (!dateString) return 'N/A';
+            const [year, month, day] = dateString.split('-');
+            return `${day}-${month}-${year.slice(2)}`; // Get last two digits of the year
+        }
+
+        // Helper function to convert 24-hour time to 12-hour AM/PM format
+        function formatTimeToAmPm(time24) {
+            if (!time24) return 'N/A';
+            const [hours, minutes] = time24.split(':');
+            let h = parseInt(hours, 10);
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            h = h % 12;
+            h = h ? h : 12; // The hour '0' should be '12'
+            const m = minutes.padStart(2, '0');
+            return `${h}:${m} ${ampm}`;
+        }
+
         // Function to create a card for a rental item
         function createRentalCard(item, type) {
             const card = document.createElement('div');
             card.id = `item-${item.id}`; // Unique ID for each card
             card.className = `bg-lente-accent bg-opacity-30 p-4 rounded-lg shadow-sm border border-lente-accent flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0 ${item.status === 'Completed' ? 'opacity-50 line-through' : ''}`;
 
+            // Format date and time for display
+            const formattedDate = formatDateToDDMMYY(item.date);
+            const formattedTime = formatTimeToAmPm(item.time);
+
             const detailsHtml = `
                 <div>
                     <p class="font-medium text-lente-primary text-lg">${item.renter}</p>
                     <p class="text-lente-primary text-sm">Camera: ${item.camera}</p>
-                    <p class="text-lente-primary text-sm">${type === 'delivery' ? 'Deliver By:' : 'Retrieve By:'} <span class="font-semibold">${item.date} ${item.time}</span></p>
+                    <p class="text-lente-primary text-sm">${type === 'delivery' ? 'Deliver By:' : 'Retrieve By:'} <span class="font-semibold">${formattedDate} ${formattedTime}</span></p>
                     <p class="text-lente-primary text-sm">Courier: <span class="font-semibold">${item.courierType || 'N/A'}</span></p>
                 </div>
             `;
