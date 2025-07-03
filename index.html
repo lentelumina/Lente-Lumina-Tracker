@@ -29,19 +29,6 @@
         .shadow-lente {
             box-shadow: 0 4px 6px -1px rgba(139, 69, 19, 0.1), 0 2px 4px -1px rgba(139, 69, 19, 0.06);
         }
-        .calendar-day-cell {
-            padding: 0.5rem;
-            border-radius: 0.375rem; /* rounded-md */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 2.5rem; /* Fixed height for consistent grid */
-        }
-        .calendar-day-cell.booked {
-            background-color: #E6B88C; /* bg-lente-accent */
-            font-weight: 600; /* font-semibold */
-            color: white;
-        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-4 sm:p-6 lg:p-8">
@@ -60,26 +47,6 @@
         </div>
         <p class="text-lg text-lente-primary text-center sm:text-right">Where Light Meets Lens. Rental Tracker.</p>
     </header>
-
-    <!-- Calendar Section -->
-    <section class="w-full max-w-4xl bg-white rounded-xl shadow-lente p-6 mb-6">
-        <h2 class="text-2xl font-semibold text-lente-primary mb-5 border-b-2 border-lente-accent pb-3">Booked Dates Calendar 📅</h2>
-        <div class="flex justify-between items-center mb-4">
-            <button id="prev-month-btn" class="px-3 py-1 bg-lente-primary text-white rounded-md hover:bg-opacity-90 transition-colors duration-200">&lt; Prev</button>
-            <h3 id="current-month-year" class="text-xl font-semibold text-lente-primary"></h3>
-            <button id="next-month-btn" class="px-3 py-1 bg-lente-primary text-white rounded-md hover:bg-opacity-90 transition-colors duration-200">Next &gt;</button>
-        </div>
-        <div id="calendar-grid" class="grid grid-cols-7 gap-1 text-center">
-            <div class="font-bold text-lente-primary calendar-day-cell">Sun</div>
-            <div class="font-bold text-lente-primary calendar-day-cell">Mon</div>
-            <div class="font-bold text-lente-primary calendar-day-cell">Tue</div>
-            <div class="font-bold text-lente-primary calendar-day-cell">Wed</div>
-            <div class="font-bold text-lente-primary calendar-day-cell">Thu</div>
-            <div class="font-bold text-lente-primary calendar-day-cell">Fri</div>
-            <div class="font-bold text-lente-primary calendar-day-cell">Sat</div>
-            <!-- Calendar days will be generated here by JavaScript -->
-        </div>
-    </section>
 
     <!-- Main Tracker Grid -->
     <main class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -149,14 +116,12 @@
         let deliveries = JSON.parse(localStorage.getItem('lenteLuminaDeliveries')) || [];
         let retrievals = JSON.parse(localStorage.getItem('lenteLuminaRetrievals')) || [];
 
-        // Calendar state
-        let currentCalendarDate = new Date(); // Start with current month
-
         // Function to save data to localStorage
         function saveData() {
             localStorage.setItem('lenteLuminaDeliveries', JSON.stringify(deliveries));
             localStorage.setItem('lenteLuminaRetrievals', JSON.stringify(retrievals));
-            refreshAllViews(); // Refresh all views after saving data
+            renderItems(deliveries, 'delivery-list', 'delivery'); // Re-render lists after saving
+            renderItems(retrievals, 'retrieval-list', 'retrieval');
         }
 
         // Function to render all items in a list
@@ -215,81 +180,6 @@
 
             card.appendChild(actionsDiv);
             return card;
-        }
-
-        // Function to render the calendar
-        function renderCalendar() {
-            const calendarGrid = document.getElementById('calendar-grid');
-            const currentMonthYearHeader = document.getElementById('current-month-year');
-
-            // Clear previous days, but keep day headers
-            calendarGrid.innerHTML = `
-                <div class="font-bold text-lente-primary calendar-day-cell">Sun</div>
-                <div class="font-bold text-lente-primary calendar-day-cell">Mon</div>
-                <div class="font-bold text-lente-primary calendar-day-cell">Tue</div>
-                <div class="font-bold text-lente-primary calendar-day-cell">Wed</div>
-                <div class="font-bold text-lente-primary calendar-day-cell">Thu</div>
-                <div class="font-bold text-lente-primary calendar-day-cell">Fri</div>
-                <div class="font-bold text-lente-primary calendar-day-cell">Sat</div>
-            `;
-
-            const year = currentCalendarDate.getFullYear();
-            const month = currentCalendarDate.getMonth(); // 0-indexed
-
-            currentMonthYearHeader.textContent = `${currentCalendarDate.toLocaleString('default', { month: 'long' })} ${year}`;
-
-            const firstDayOfMonth = new Date(year, month, 1);
-            const lastDayOfMonth = new Date(year, month + 1, 0);
-            const numDays = lastDayOfMonth.getDate();
-            const startDay = firstDayOfMonth.getDay(); // 0 for Sunday, 1 for Monday...
-
-            // Add empty cells for days before the 1st
-            for (let i = 0; i < startDay; i++) {
-                const emptyCell = document.createElement('div');
-                emptyCell.className = 'calendar-day-cell'; // Use the base cell class
-                calendarGrid.appendChild(emptyCell);
-            }
-
-            // Collect all booked dates for the current month
-            const bookedDates = new Set();
-            [...deliveries, ...retrievals].forEach(item => {
-                const itemDate = new Date(item.date);
-                // Ensure the date is valid and matches the current calendar month/year
-                if (!isNaN(itemDate) && itemDate.getFullYear() === year && itemDate.getMonth() === month) {
-                    bookedDates.add(itemDate.getDate());
-                }
-            });
-
-            // Add day cells
-            for (let day = 1; day <= numDays; day++) {
-                const dayCell = document.createElement('div');
-                dayCell.className = 'calendar-day-cell text-lente-primary'; // Base class for day cells
-                dayCell.textContent = day;
-
-                if (bookedDates.has(day)) {
-                    dayCell.classList.add('booked'); // Add 'booked' class for styling
-                }
-
-                calendarGrid.appendChild(dayCell);
-            }
-        }
-
-        // Event listeners for month navigation
-        document.getElementById('prev-month-btn').addEventListener('click', () => {
-            currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
-            renderCalendar();
-        });
-
-        document.getElementById('next-month-btn').addEventListener('click', () => {
-            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
-            renderCalendar();
-        });
-
-        // Function to refresh all views (lists and calendar)
-        function refreshAllViews() {
-            renderItems(deliveries, 'delivery-list', 'delivery');
-            renderItems(retrievals, 'retrieval-list', 'retrieval');
-            renderCalendar();
         }
 
         // Add New Delivery Item
@@ -356,7 +246,7 @@
 
         // Initial render when the page loads
         document.addEventListener('DOMContentLoaded', () => {
-            refreshAllViews(); // Initial render of all components
+            saveData(); // Initial render of lists based on saved data
         });
 
     </script>
