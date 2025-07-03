@@ -80,14 +80,8 @@
     <!-- Header Section -->
     <header class="w-full max-w-4xl bg-white rounded-xl shadow-lente p-6 mb-8 flex flex-col sm:flex-row items-center justify-center sm:justify-between">
         <div class="flex items-center space-x-3 mb-4 sm:mb-0">
-            <!-- Logo-inspired icon (simple shutter/lens SVG) -->
-            <svg class="w-10 h-10 text-lente-primary" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-                <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/>
-                <path d="M12 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/>
-                <path d="M12 4.5a.5.5 0 01.5.5v1a.5.5 0 01-1 0v-1a.5.5 0 01.5-.5zM12 17.5a.5.5 0 01.5.5v1a.5.5 0 01-1 0v-1a.5.5 0 01.5-.5zM19.5 12a.5.5 0 01.5-.5h1a.5.5 0 010 1h-1a.5.5 0 01-.5-.5zM4.5 12a.5.5 0 01.5-.5h1a.5.5 0 010 1h-1a.5.5 0 01-.5-.5zM16.5 7.5a.5.5 0 01.35-.15l.707-.707a.5.5 0 01.707.707l-.707.707a.5.5 0 01-.707-.707zM7.5 16.5a.5.5 0 01-.35.15l-.707.707a.5.5 0 01-.707-.707l.707-.707a.5.5 0 01.707.707zM16.5 16.5a.5.5 0 01.35.15l.707.707a.5.5 0 01-.707.707l-.707-.707a.5.5 0 01-.35-.15zM7.5 7.5a.5.5 0 01-.35-.15l-.707-.707a.5.5 0 01.707-.707l.707.707a.5.5 0 01.35.15z"/>
-            </svg>
-            <h1 class="text-3xl font-bold text-lente-primary font-lora">Lenté Lumina</h1>
+            <!-- Lente Lumina Logo Image (Removed) -->
+            <h1 class="text-3xl font-bold text-lente-primary">Lenté Lumina</h1>
         </div>
         <div class="flex flex-col items-center sm:items-end">
             <p class="text-lg text-lente-primary text-center sm:text-right">Where Light Meets Lens.<br>Rental Tracker</p>
@@ -295,7 +289,9 @@
 
             toggleButton.addEventListener('click', async () => {
                 // Update status in Firestore
-                const itemRef = doc(db, `artifacts/${appId}/users/${userId}/${type}s`, item.id);
+                // Corrected collection path to use 'deliveries' or 'retrievals' explicitly
+                const collectionName = type === 'delivery' ? 'deliveries' : 'retrievals';
+                const itemRef = doc(db, `artifacts/${appId}/users/${userId}/${collectionName}`, item.id);
                 try {
                     await updateDoc(itemRef, {
                         status: item.status === 'Pending' ? 'Completed' : 'Pending'
@@ -315,7 +311,9 @@
                 showConfirmDialog(`Are you sure you want to delete ${item.renter}'s ${type} item?`, async (confirmed) => {
                     if (confirmed) {
                         // Delete from Firestore
-                        const itemRef = doc(db, `artifacts/${appId}/users/${userId}/${type}s`, item.id);
+                        // Corrected collection path to use 'deliveries' or 'retrievals' explicitly
+                        const collectionName = type === 'delivery' ? 'deliveries' : 'retrievals';
+                        const itemRef = doc(db, `artifacts/${appId}/users/${userId}/${collectionName}`, item.id);
                         try {
                             await deleteDoc(itemRef);
                         } catch (e) {
