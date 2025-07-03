@@ -17,7 +17,7 @@
         .text-lente-primary {
             color: #8B4513; /* A warm brown/sienna for text and accents */
         }
-        .bg-lente-primary { /* ADDED THIS CLASS */
+        .bg-lente-primary {
             background-color: #8B4513; /* A warm brown/sienna for backgrounds */
         }
         .bg-lente-accent {
@@ -59,6 +59,11 @@
                 <input type="text" id="delivery-camera-model" placeholder="Camera Model" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
                 <input type="date" id="delivery-date" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
                 <input type="time" id="delivery-time" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+                <select id="delivery-courier-type" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+                    <option value="">Select Courier Type</option>
+                    <option value="Personal">Personal</option>
+                    <option value="Third-Party Courier">Third-Party Courier</option>
+                </select>
                 <button id="add-delivery-btn" class="w-full px-4 py-2 bg-lente-primary text-white rounded-md hover:bg-opacity-90 transition-colors duration-200">Add Delivery</button>
             </div>
             <div id="delivery-list" class="space-y-4">
@@ -74,6 +79,11 @@
                 <input type="text" id="retrieval-camera-model" placeholder="Camera Model" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
                 <input type="date" id="retrieval-date" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
                 <input type="time" id="retrieval-time" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+                <select id="retrieval-courier-type" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-lente-accent">
+                    <option value="">Select Courier Type</option>
+                    <option value="Personal">Personal</option>
+                    <option value="Third-Party Courier">Third-Party Courier</option>
+                </select>
                 <button id="add-retrieval-btn" class="w-full px-4 py-2 bg-lente-primary text-white rounded-md hover:bg-opacity-90 transition-colors duration-200">Add Retrieval</button>
             </div>
             <div id="retrieval-list" class="space-y-4">
@@ -114,6 +124,7 @@
                     <p class="font-medium text-lente-primary text-lg">${item.renter}</p>
                     <p class="text-lente-primary text-sm">Camera: ${item.camera}</p>
                     <p class="text-lente-primary text-sm">${type === 'delivery' ? 'Deliver By:' : 'Retrieve By:'} <span class="font-semibold">${item.date} ${item.time}</span></p>
+                    <p class="text-lente-primary text-sm">Courier: <span class="font-semibold">${item.courierType || 'N/A'}</span></p>
                 </div>
             `;
             card.innerHTML = detailsHtml;
@@ -159,27 +170,30 @@
             const renter = document.getElementById('delivery-renter-name').value;
             const camera = document.getElementById('delivery-camera-model').value;
             const date = document.getElementById('delivery-date').value;
-            const time = document.getElementById('delivery-time').value; // Get time input
+            const time = document.getElementById('delivery-time').value;
+            const courierType = document.getElementById('delivery-courier-type').value; // Get courier type
 
-            if (renter && camera && date && time) { // Check for time input
+            if (renter && camera && date && time && courierType) { // Check for all inputs
                 const newItem = {
-                    id: `d${Date.now()}`, // Unique ID based on timestamp
+                    id: `d${Date.now()}`,
                     renter,
                     camera,
                     date,
-                    time, // Add time to newItem
+                    time,
+                    courierType, // Add courierType to newItem
                     status: 'Pending'
                 };
                 deliveries.push(newItem);
-                saveData(); // Save changes to localStorage
+                saveData();
                 renderItems(deliveries, 'delivery-list', 'delivery');
                 // Clear input fields
                 document.getElementById('delivery-renter-name').value = '';
                 document.getElementById('delivery-camera-model').value = '';
                 document.getElementById('delivery-date').value = '';
-                document.getElementById('delivery-time').value = ''; // Clear time input
+                document.getElementById('delivery-time').value = '';
+                document.getElementById('delivery-courier-type').value = ''; // Clear select input
             } else {
-                alert('Please fill in all delivery fields.'); // Using alert for simplicity
+                alert('Please fill in all delivery fields, including courier type.');
             }
         });
 
@@ -188,27 +202,30 @@
             const renter = document.getElementById('retrieval-renter-name').value;
             const camera = document.getElementById('retrieval-camera-model').value;
             const date = document.getElementById('retrieval-date').value;
-            const time = document.getElementById('retrieval-time').value; // Get time input
+            const time = document.getElementById('retrieval-time').value;
+            const courierType = document.getElementById('retrieval-courier-type').value; // Get courier type
 
-            if (renter && camera && date && time) { // Check for time input
+            if (renter && camera && date && time && courierType) { // Check for all inputs
                 const newItem = {
-                    id: `r${Date.now()}`, // Unique ID based on timestamp
+                    id: `r${Date.now()}`,
                     renter,
                     camera,
                     date,
-                    time, // Add time to newItem
+                    time,
+                    courierType, // Add courierType to newItem
                     status: 'Pending'
                 };
                 retrievals.push(newItem);
-                saveData(); // Save changes to localStorage
+                saveData();
                 renderItems(retrievals, 'retrieval-list', 'retrieval');
                 // Clear input fields
                 document.getElementById('retrieval-renter-name').value = '';
                 document.getElementById('retrieval-camera-model').value = '';
                 document.getElementById('retrieval-date').value = '';
-                document.getElementById('retrieval-time').value = ''; // Clear time input
+                document.getElementById('retrieval-time').value = '';
+                document.getElementById('retrieval-courier-type').value = ''; // Clear select input
             } else {
-                alert('Please fill in all retrieval fields.'); // Using alert for simplicity
+                alert('Please fill in all retrieval fields, including courier type.');
             }
         });
 
