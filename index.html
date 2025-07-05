@@ -80,6 +80,7 @@
                 <option value="Fujifilm Instax Mini EVO (Black)">Fujifilm Instax Mini EVO (Black)</option>
                 <option value="Insta360 Ace Pro 2">Insta360 Ace Pro 2</option>
                 <option value="Insta360 X5">Insta360 X5</option>
+                <option value="DJI Osmo Pocket 3">DJI Osmo Pocket 3</option>
                 <option value="DJI Mini 4 Pro">DJI Mini 4 Pro</option>
             </select>
             <label for="common-booking-start-date" class="block text-sm font-medium text-lente-primary">Booking Start Date:</label>
@@ -183,6 +184,13 @@
         const modalOkBtn = document.getElementById('modal-ok-btn');
         const modalCancelBtn = document.getElementById('modal-cancel-btn');
 
+        /**
+         * Displays a custom modal for alerts or confirmations.
+         * @param {string} title - The title of the modal.
+         * @param {string} message - The message content of the modal.
+         * @param {boolean} [isConfirm=false] - If true, displays a cancel button for confirmation.
+         * @returns {Promise<boolean>} - Resolves true if OK is clicked, false if Cancel is clicked.
+         */
         function showModal(title, message, isConfirm = false) {
             modalTitle.textContent = title;
             modalMessage.textContent = message;
@@ -203,16 +211,24 @@
 
         // --- Data Management & Rendering ---
 
-        // Function to save data to localStorage
+        /**
+         * Saves the current deliveries and retrievals arrays to localStorage.
+         * After saving, it re-renders both lists to reflect any changes.
+         */
         function saveData() {
             localStorage.setItem('lenteLuminaDeliveries', JSON.stringify(deliveries));
             localStorage.setItem('lenteLuminaRetrievals', JSON.stringify(retrievals));
             renderLists(); // Re-render both lists after saving
         }
 
-        // Function to sort rental items
+        /**
+         * Sorts a list of rental items based on the specified criteria.
+         * @param {Array<Object>} list - The array of rental items to sort.
+         * @param {string} sortBy - The sorting criteria ('dateAsc', 'dateDesc', 'renter', 'camera').
+         * @returns {Array<Object>} - The sorted array.
+         */
         const sortItems = (list, sortBy) => {
-            return list.sort((a, b) => {
+            return [...list].sort((a, b) => { // Create a shallow copy to avoid modifying the original array directly
                 if (sortBy === 'dateAsc') {
                     const dateA = new Date(`${a.date}T${a.time}`);
                     const dateB = new Date(`${b.date}T${b.time}`);
@@ -230,7 +246,14 @@
             });
         };
 
-        // Function to render items in a list with sorting and filtering
+        /**
+         * Renders rental items into a specified container, applying sorting and filtering.
+         * @param {Array<Object>} list - The array of rental items to render.
+         * @param {string} containerId - The ID of the HTML element where items will be rendered.
+         * @param {string} type - The type of item ('delivery' or 'retrieval').
+         * @param {string} sortBy - The sorting criteria.
+         * @param {string} filterStatus - The status to filter by ('all', 'Pending', 'Completed').
+         */
         function renderItems(list, containerId, type, sortBy, filterStatus) {
             const container = document.getElementById(containerId);
             container.innerHTML = ''; // Clear existing items
@@ -252,7 +275,9 @@
             });
         }
 
-        // Function to render both lists based on current sort/filter selections
+        /**
+         * Renders both delivery and retrieval lists based on current sort/filter selections.
+         */
         function renderLists() {
             const sortDeliveryBy = document.getElementById('sort-delivery-by').value;
             const filterDeliveryStatus = document.getElementById('filter-delivery-status').value;
@@ -263,14 +288,22 @@
             renderItems(retrievals, 'retrieval-list', 'retrieval', sortRetrievalBy, filterRetrievalStatus);
         }
 
-        // Helper function to format date to dd-mm-yy
+        /**
+         * Helper function to format date string to dd-mm-yy format.
+         * @param {string} dateString - The date string in YYYY-MM-DD format.
+         * @returns {string} - The formatted date string.
+         */
         function formatDateToDDMMYY(dateString) {
             if (!dateString) return 'N/A';
             const [year, month, day] = dateString.split('-');
             return `${day}-${month}-${year.slice(2)}`; // Get last two digits of the year
         }
 
-        // Helper function to convert 24-hour time to 12-hour AM/PM format
+        /**
+         * Helper function to convert 24-hour time to 12-hour AM/PM format.
+         * @param {string} time24 - The time string in HH:MM (24-hour) format.
+         * @returns {string} - The formatted time string (e.g., "3:00 PM").
+         */
         function formatTimeToAmPm(time24) {
             if (!time24) return 'N/A';
             const [hours, minutes] = time24.split(':');
@@ -282,7 +315,12 @@
             return `${h}:${m} ${ampm}`;
         }
 
-        // Function to create a card for a rental item
+        /**
+         * Creates an HTML card element for a rental item.
+         * @param {Object} item - The rental item object.
+         * @param {string} type - The type of item ('delivery' or 'retrieval').
+         * @returns {HTMLElement} - The created div element representing the rental card.
+         */
         function createRentalCard(item, type) {
             const card = document.createElement('div');
             card.id = `item-${item.id}`; // Unique ID for each card
@@ -346,7 +384,9 @@
         const commonBookingEndTime = document.getElementById('common-booking-end-time');
         const commonCourierType = document.getElementById('common-courier-type');
 
-        // Function to clear all common input fields
+        /**
+         * Clears all common input fields in the "Add New Rental Request" section.
+         */
         function clearCommonInputs() {
             commonRenterName.value = '';
             commonCameraModel.value = '';
@@ -357,13 +397,18 @@
             commonCourierType.value = '';
         }
 
-        // Function to reset the flags for tracking current input additions
+        /**
+         * Resets the flags that track whether a delivery or retrieval has been added
+         * for the current set of input values.
+         */
         function resetCurrentAddFlags() {
             deliveryAddedCurrent = false;
             retrievalAddedCurrent = false;
         }
 
         // Add event listeners to all common input fields to reset flags on change
+        // This ensures that if the user modifies inputs after adding one type,
+        // the flags are reset, allowing them to add the other type or a new entry.
         [
             commonRenterName, commonCameraModel, commonBookingStartDate,
             commonBookingStartTime, commonBookingEndDate, commonBookingEndTime,
@@ -376,7 +421,7 @@
 
         // Add New Delivery Item (using common inputs)
         document.getElementById('add-delivery-btn').addEventListener('click', async () => {
-            const renter = commonRenterName.value;
+            const renter = commonRenterName.value.trim();
             const camera = commonCameraModel.value;
             const date = commonBookingStartDate.value; // Delivery uses start date
             const time = commonBookingStartTime.value; // Delivery uses start time
@@ -384,7 +429,7 @@
 
             if (renter && camera && date && time && courierType) {
                 const newItem = {
-                    id: `d${Date.now()}`,
+                    id: `d${Date.now()}`, // Unique ID for delivery item
                     renter,
                     camera,
                     date,
@@ -397,9 +442,10 @@
                 await showModal('Success', 'Delivery item added!');
                 
                 deliveryAddedCurrent = true; // Mark delivery as added for current input
+                // If both delivery and retrieval have been added from the same input set, clear inputs
                 if (deliveryAddedCurrent && retrievalAddedCurrent) {
-                    clearCommonInputs(); // Clear if both are added
-                    resetCurrentAddFlags(); // Reset flags
+                    clearCommonInputs();
+                    resetCurrentAddFlags(); // Reset flags for next input set
                 }
             } else {
                 await showModal('Input Required', 'Please fill in all required fields for delivery (Renter, Camera, Start Date/Time, Courier Type).');
@@ -408,7 +454,7 @@
 
         // Add New Retrieval Item (using common inputs)
         document.getElementById('add-retrieval-btn').addEventListener('click', async () => {
-            const renter = commonRenterName.value;
+            const renter = commonRenterName.value.trim();
             const camera = commonCameraModel.value;
             const date = commonBookingEndDate.value; // Retrieval uses end date
             const time = commonBookingEndTime.value; // Retrieval uses end time
@@ -416,7 +462,7 @@
 
             if (renter && camera && date && time && courierType) {
                 const newItem = {
-                    id: `r${Date.now()}`,
+                    id: `r${Date.now()}`, // Unique ID for retrieval item
                     renter,
                     camera,
                     date,
@@ -429,9 +475,10 @@
                 await showModal('Success', 'Retrieval item added!');
                 
                 retrievalAddedCurrent = true; // Mark retrieval as added for current input
+                // If both delivery and retrieval have been added from the same input set, clear inputs
                 if (deliveryAddedCurrent && retrievalAddedCurrent) {
-                    clearCommonInputs(); // Clear if both are added
-                    resetCurrentAddFlags(); // Reset flags
+                    clearCommonInputs();
+                    resetCurrentAddFlags(); // Reset flags for next input set
                 }
             } else {
                 await showModal('Input Required', 'Please fill in all required fields for retrieval (Renter, Camera, End Date/Time, Courier Type).');
@@ -446,7 +493,8 @@
 
         // Initial render when the page loads
         document.addEventListener('DOMContentLoaded', () => {
-            saveData(); // Initial render of lists based on saved data
+            // Call renderLists directly to display existing data from localStorage
+            renderLists(); 
         });
 
     </script>
